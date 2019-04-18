@@ -7,26 +7,24 @@ import com.my.blog.website.config.query.core.QueryToSpecification;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
-import org.springframework.data.jpa.repository.support.CrudMethodMetadata;
 import org.springframework.data.jpa.repository.support.JpaEntityInformation;
+import org.springframework.data.jpa.repository.support.JpaEntityInformationSupport;
 import org.springframework.data.jpa.repository.support.SimpleJpaRepository;
 import org.springframework.data.repository.NoRepositoryBean;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
-import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaUpdate;
 import javax.persistence.criteria.Root;
 import java.io.Serializable;
+import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 
 /**
  * 扩展对JAP功能加强
@@ -46,12 +44,12 @@ public class BaseSimpleJpaRepositoryEx<T, ID extends Serializable> extends Simpl
      * BaseSimpleJpaRepositoryEx 构造器
      *
      * @param domainClass
-     * @param entityManager
+     * @param em
      */
-    public BaseSimpleJpaRepositoryEx(Class<T> domainClass, EntityManager entityManager) {
-        super(domainClass, entityManager);
-        baseEm = entityManager;
-//        baseEmInfo = entityInformation;
+    public BaseSimpleJpaRepositoryEx(Class<T> domainClass, EntityManager em) {
+        super(domainClass, em);
+        baseEm = em;
+        baseEmInfo = JpaEntityInformationSupport.getEntityInformation(domainClass, em);
     }
 
     /**
@@ -77,7 +75,7 @@ public class BaseSimpleJpaRepositoryEx<T, ID extends Serializable> extends Simpl
             return (List<T>) findAll(getConditonByQuery(query), query.getPage());
 
         } else {
-            return (List<T>) findAll(getConditonByQuery(query));
+            return findAll(getConditonByQuery(query));
         }
 
     }
@@ -106,186 +104,6 @@ public class BaseSimpleJpaRepositoryEx<T, ID extends Serializable> extends Simpl
     }
 
 
-    @Override
-    public List<T> findAll() {
-        return super.findAll();
-    }
-
-    @Override
-    protected CrudMethodMetadata getRepositoryMethodMetadata() {
-        // TODO 这是系统自动生成描述，请在此补完后续代码
-        return super.getRepositoryMethodMetadata();
-    }
-
-    @Override
-    protected Class<T> getDomainClass() {
-        // TODO 这是系统自动生成描述，请在此补完后续代码
-        return super.getDomainClass();
-    }
-
-    @Override
-    public T findOne(ID id) {
-        // TODO 这是系统自动生成描述，请在此补完后续代码
-        return super.findOne(id);
-    }
-
-    @Override
-    protected Map<String, Object> getQueryHints() {
-        // TODO 这是系统自动生成描述，请在此补完后续代码
-        return super.getQueryHints();
-    }
-
-    @Override
-    public T getOne(ID id) {
-        // TODO 这是系统自动生成描述，请在此补完后续代码
-        return super.getOne(id);
-    }
-
-    @Override
-    public boolean exists(ID id) {
-        // TODO 这是系统自动生成描述，请在此补完后续代码
-        return super.exists(id);
-    }
-
-    @Override
-    public List<T> findAll(Iterable<ID> ids) {
-        // TODO 这是系统自动生成描述，请在此补完后续代码
-        return super.findAll(ids);
-    }
-
-    @Override
-    public List<T> findAll(Sort sort) {
-        // TODO 这是系统自动生成描述，请在此补完后续代码
-        return super.findAll(sort);
-    }
-
-    @Override
-    public Page<T> findAll(Pageable pageable) {
-        // TODO 这是系统自动生成描述，请在此补完后续代码
-        return super.findAll(pageable);
-    }
-
-    @Override
-    public T findOne(Specification<T> spec) {
-        // TODO 这是系统自动生成描述，请在此补完后续代码
-        return super.findOne(spec);
-    }
-
-    @Override
-    public List<T> findAll(Specification<T> spec) {
-        // TODO 这是系统自动生成描述，请在此补完后续代码
-        return super.findAll(spec);
-    }
-
-    @Override
-    public Page<T> findAll(Specification<T> spec, Pageable pageable) {
-        // TODO 这是系统自动生成描述，请在此补完后续代码
-        return super.findAll(spec, pageable);
-    }
-
-    @Override
-    public List<T> findAll(Specification<T> spec, Sort sort) {
-        // TODO 这是系统自动生成描述，请在此补完后续代码
-        return super.findAll(spec, sort);
-    }
-
-    @Override
-    public <S extends T> S findOne(Example<S> example) {
-        // TODO 这是系统自动生成描述，请在此补完后续代码
-        return super.findOne(example);
-    }
-
-    @Override
-    public <S extends T> long count(Example<S> example) {
-        // TODO 这是系统自动生成描述，请在此补完后续代码
-        return super.count(example);
-    }
-
-    @Override
-    public <S extends T> boolean exists(Example<S> example) {
-        // TODO 这是系统自动生成描述，请在此补完后续代码
-        return super.exists(example);
-    }
-
-    @Override
-    public <S extends T> List<S> findAll(Example<S> example) {
-        // TODO 这是系统自动生成描述，请在此补完后续代码
-        return super.findAll(example);
-    }
-
-    @Override
-    public <S extends T> List<S> findAll(Example<S> example, Sort sort) {
-        // TODO 这是系统自动生成描述，请在此补完后续代码
-        return super.findAll(example, sort);
-    }
-
-    @Override
-    public <S extends T> Page<S> findAll(Example<S> example, Pageable pageable) {
-        // TODO 这是系统自动生成描述，请在此补完后续代码
-        return super.findAll(example, pageable);
-    }
-
-    @Override
-    public long count() {
-        // TODO 这是系统自动生成描述，请在此补完后续代码
-        return super.count();
-    }
-
-    @Override
-    public long count(Specification<T> spec) {
-        // TODO 这是系统自动生成描述，请在此补完后续代码
-        return super.count(spec);
-    }
-
-    @Override
-    protected Page<T> readPage(TypedQuery<T> query, Pageable pageable, Specification<T> spec) {
-        // TODO 这是系统自动生成描述，请在此补完后续代码
-        return super.readPage(query, pageable, spec);
-    }
-
-    @Override
-    protected <S extends T> Page<S> readPage(TypedQuery<S> query, Class<S> domainClass, Pageable pageable,
-                                             Specification<S> spec) {
-        // TODO 这是系统自动生成描述，请在此补完后续代码
-        return super.readPage(query, domainClass, pageable, spec);
-    }
-
-    @Override
-    protected TypedQuery<T> getQuery(Specification<T> spec, Pageable pageable) {
-        // TODO 这是系统自动生成描述，请在此补完后续代码
-        return super.getQuery(spec, pageable);
-    }
-
-    @Override
-    protected <S extends T> TypedQuery<S> getQuery(Specification<S> spec, Class<S> domainClass, Pageable pageable) {
-        // TODO 这是系统自动生成描述，请在此补完后续代码
-        return super.getQuery(spec, domainClass, pageable);
-    }
-
-    @Override
-    protected TypedQuery<T> getQuery(Specification<T> spec, Sort sort) {
-        // TODO 这是系统自动生成描述，请在此补完后续代码
-        return super.getQuery(spec, sort);
-    }
-
-    @Override
-    protected <S extends T> TypedQuery<S> getQuery(Specification<S> spec, Class<S> domainClass, Sort sort) {
-        // TODO 这是系统自动生成描述，请在此补完后续代码
-        return super.getQuery(spec, domainClass, sort);
-    }
-
-    @Override
-    protected TypedQuery<Long> getCountQuery(Specification<T> spec) {
-        // TODO 这是系统自动生成描述，请在此补完后续代码
-        return super.getCountQuery(spec);
-    }
-
-    @Override
-    protected <S extends T> TypedQuery<Long> getCountQuery(Specification<S> spec, Class<S> domainClass) {
-        // TODO 这是系统自动生成描述，请在此补完后续代码
-        return super.getCountQuery(spec, domainClass);
-    }
-
     /**
      * 封装自定义组合查询排序列表方法
      * <p>
@@ -296,71 +114,6 @@ public class BaseSimpleJpaRepositoryEx<T, ID extends Serializable> extends Simpl
         return findAll(getConditonByQuery(query), sort);
     }
 
-    @Transactional(propagation = Propagation.REQUIRED)
-    @Override
-    public <S extends T> List<S> save(Iterable<S> arg0) {
-        return super.save(arg0);
-    }
-
-    @Transactional(propagation = Propagation.REQUIRED)
-    @Override
-    public <S extends T> S save(S entity) {
-        return super.save(entity);
-    }
-
-    @Transactional(propagation = Propagation.REQUIRED)
-    @Override
-    public <S extends T> S saveAndFlush(S entity) {
-        return super.saveAndFlush(entity);
-    }
-
-    @Transactional(propagation = Propagation.REQUIRED)
-    @Override
-    public void setRepositoryMethodMetadata(CrudMethodMetadata crudMethodMetadata) {
-        super.setRepositoryMethodMetadata(crudMethodMetadata);
-    }
-
-    @Transactional(propagation = Propagation.REQUIRED)
-    @Override
-    public void delete(ID id) {
-        super.delete(id);
-    }
-
-    @Transactional(propagation = Propagation.REQUIRED)
-    @Override
-    public void delete(T entity) {
-        super.delete(entity);
-    }
-
-    @Transactional(propagation = Propagation.REQUIRED)
-    @Override
-    public void delete(Iterable<? extends T> entities) {
-        super.delete(entities);
-    }
-
-    @Transactional(propagation = Propagation.REQUIRED)
-    @Override
-    public void deleteInBatch(Iterable<T> entities) {
-        super.deleteInBatch(entities);
-    }
-
-    @Transactional(propagation = Propagation.REQUIRED)
-    @Override
-    public void deleteAll() {
-        super.deleteAll();
-    }
-
-    @Transactional(propagation = Propagation.REQUIRED)
-    @Override
-    public void deleteAllInBatch() {
-        super.deleteAllInBatch();
-    }
-
-    @Transactional(propagation = Propagation.REQUIRED)
-    @Override
-    public void flush() {
-        super.flush();
-    }
 
     /**
      * 自定义更新update方法
@@ -371,21 +124,21 @@ public class BaseSimpleJpaRepositoryEx<T, ID extends Serializable> extends Simpl
      * @author liuyi 2016年7月16日
      */
     @Override
-    @Transactional(propagation = Propagation.REQUIRED)
+    @Transactional
     public int update(T t, BaseQuery where, String... updateFileds) {
         CriteriaBuilder cb = baseEm.getEntityManagerFactory().getCriteriaBuilder();
         CriteriaUpdate<T> update = (CriteriaUpdate<T>) cb.createCriteriaUpdate(t.getClass());
         Root<T> root = update.from((Class<T>) t.getClass());
 
-        for (String fieldName : updateFileds) {
+        Arrays.stream(updateFileds).forEach(fieldName -> {
             try {
                 Object o = PropertyUtils.getProperty(t, fieldName);
                 update.set(fieldName, o);
             } catch (Exception e) {
                 log.error("update error:" + e);
             }
-        }
-        update.where(BaseQueryPredicateBuilder.getPredicate2(root, cb, where));
+        });
+        update.where(BaseQueryPredicateBuilder.getPredicate(root, cb, where));
         return baseEm.createQuery(update).executeUpdate();
     }
 
@@ -398,7 +151,7 @@ public class BaseSimpleJpaRepositoryEx<T, ID extends Serializable> extends Simpl
      * @author liuyi 2016年7月16日
      */
     @Override
-    @Transactional(propagation = Propagation.REQUIRED)
+    @Transactional
     public int updateById(T t, ID id, String... updateFileds) {
         CriteriaBuilder cb = baseEm.getEntityManagerFactory().getCriteriaBuilder();
         CriteriaUpdate<T> update = (CriteriaUpdate<T>) cb.createCriteriaUpdate(t.getClass());
@@ -421,7 +174,6 @@ public class BaseSimpleJpaRepositoryEx<T, ID extends Serializable> extends Simpl
             }
         }
         return baseEm.createQuery(update).executeUpdate();
-
     }
 
 

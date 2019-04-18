@@ -1,7 +1,5 @@
 package com.my.blog.website.utils;
 
-import com.my.blog.website.utils.StringUtils;
-
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;

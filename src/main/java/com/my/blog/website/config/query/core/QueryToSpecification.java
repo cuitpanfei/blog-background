@@ -1,11 +1,11 @@
 package com.my.blog.website.config.query.core;
 
+import org.springframework.data.jpa.domain.Specification;
+
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
-
-import org.springframework.data.jpa.domain.Specification;
 
 /**
  * 自定义Query语言转Specification
@@ -32,7 +32,7 @@ public class QueryToSpecification implements Specification {
 	 */
 	@Override
 	public Predicate toPredicate(Root root, CriteriaQuery cquery, CriteriaBuilder cb) {
-		return BaseQueryPredicateBuilder.getPredicate(root, cb, cquery,this.query);
+		return BaseQueryPredicateBuilder.getPredicate(root, cb, this.query);
 	}
 
 }
